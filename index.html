@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MACUMBA</title>
+</head>
+<body>
+  <h2>Stream da Câmera - MACUMBA</h2>
+  <video id="video" controls style="width:100%;max-width:720px"></video>
+
+  <!-- Biblioteca hls.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    // ← Cole aqui o link correto, sem concatenações inválidas
+    const url = 'hhttps://dvr-br1.hostlink.com/cam-c0bcac1458/index.m3u8?token=3.FvacFA2sAAAAAAAAAAIABiXFxdvlbK73uZZ5sLiCCvaI1U3VZgc09mmOttps://dvr-br1.hostlink.com/cam-8277034532/index.m3u8?token=3.FvacFA2sAAAAAAAAAAIABiXFxdvlbMWTsdE5MdfsuqywS8ell_QjnbZB';
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.error('HLS.js error:', data);
+      });
+    }
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Safari (suporta HLS nativamente)
+      video.src = url;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+    }
+    else {
+      alert('Este navegador não suporta HLS.');
+    }
+  </script>
+</body>
+</html>
